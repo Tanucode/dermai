@@ -29,6 +29,7 @@ from database.db import get_db
 from models.database_models import AnalysisHistory, User
 from services.gemini_service import analyze_skin_image, generate_skincare_recommendations
 from services.rag_service import query_knowledge_base
+from services.cv_service import process_and_detect
 from routers.auth import get_current_user
 
 # Create a router — like a mini FastAPI app just for analysis routes
