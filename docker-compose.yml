@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # The FastAPI Backend
+  backend:
+    build: ./backend
+    container_name: dermai_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/chroma_db:/app/chroma_db
+      - ./backend/dermai.db:/app/dermai.db
+    environment:
+      # These will be read from your actual .env file or host environment
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - SECRET_KEY=${SECRET_KEY:-default_super_secret_key}
+    restart: unless-stopped
+
+  # The React Frontend
+  frontend:
+    build: ./frontend
+    container_name: dermai_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

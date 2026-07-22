@@ -1,0 +1,51 @@
+[
+  {
+    "ingredient_name": "Niacinamide",
+    "description": "Also known as Vitamin B3, it is a water-soluble vitamin that works with the natural substances in your skin to help visibly improve enlarged pores, uneven skin tone, fine lines and wrinkles, dullness, and a weakened surface.",
+    "benefits": ["Reduces inflammation", "Minimizes pore appearance", "Regulates oil", "Protects against sun damage", "Treats hyperpigmentation"],
+    "good_for": ["Acne", "Oily Skin", "Rosacea", "Dark Spots"],
+    "clinical_notes": "Clinical studies show 5% niacinamide can significantly reduce hyperpigmentation and increase skin lightness after 4 weeks of use."
+  },
+  {
+    "ingredient_name": "Salicylic Acid (BHA)",
+    "description": "A beta hydroxy acid that exfoliates the skin. It is oil-soluble, allowing it to penetrate deep into the pores to dissolve dead skin cells and sebum.",
+    "benefits": ["Unclogs pores", "Reduces acne", "Exfoliates dead skin", "Anti-inflammatory"],
+    "good_for": ["Acne", "Blackheads", "Whiteheads", "Oily Skin"],
+    "clinical_notes": "Highly effective for comedonal acne. Avoid combining with retinol or AHAs in the same routine to prevent severe irritation."
+  },
+  {
+    "ingredient_name": "Hyaluronic Acid",
+    "description": "A naturally occurring glycosaminoglycan found throughout the body's connective tissue. It is a powerful humectant that can hold up to 1000 times its weight in water.",
+    "benefits": ["Intense hydration", "Plumps skin", "Reduces fine lines", "Speeds wound healing"],
+    "good_for": ["Dry Skin", "Dehydrated Skin", "Wrinkles", "All Skin Types"],
+    "clinical_notes": "Must be applied to damp skin and sealed with a moisturizer/emollient to prevent trans-epidermal water loss (TEWL)."
+  },
+  {
+    "ingredient_name": "Vitamin C (L-Ascorbic Acid)",
+    "description": "A potent antioxidant that neutralizes free radicals, aids in your skin's natural regeneration process, and helps repair damaged skin cells.",
+    "benefits": ["Brightens skin tone", "Boosts collagen production", "Fades dark spots", "Protects against UV damage"],
+    "good_for": ["Dullness", "Hyperpigmentation", "Aging Skin"],
+    "clinical_notes": "Highly unstable. Must be stored in a dark, airtight container. Best used in the morning under sunscreen."
+  },
+  {
+    "ingredient_name": "Retinol",
+    "description": "A derivative of Vitamin A, it is the gold standard in anti-aging skincare. It increases cell turnover and stimulates collagen production.",
+    "benefits": ["Reduces wrinkles", "Treats acne", "Fades dark spots", "Improves skin texture"],
+    "good_for": ["Aging Skin", "Acne", "Hyperpigmentation"],
+    "clinical_notes": "Causes 'purging' and irritation initially. Must be used at night only, and requires daily broad-spectrum SPF 30+."
+  },
+  {
+    "ingredient_name": "Ceramides",
+    "description": "Lipids (fats) that are found naturally in high concentrations in the uppermost layers of skin. They make up over 50% of skin's composition.",
+    "benefits": ["Restores skin barrier", "Locks in moisture", "Protects against environmental damage"],
+    "good_for": ["Dry Skin", "Eczema", "Rosacea", "Compromised Barrier"],
+    "clinical_notes": "Essential for repairing a damaged skin barrier caused by over-exfoliation or harsh acne treatments."
+  },
+  {
+    "ingredient_name": "Centella Asiatica (Cica)",
+    "description": "An herb used in traditional Asian medicine. It contains active compounds like madecassoside that possess powerful healing and anti-inflammatory properties.",
+    "benefits": ["Soothes irritation", "Reduces redness", "Heals wounds", "Boosts collagen"],
+    "good_for": ["Rosacea", "Sensitive Skin", "Acne Scars (PIE)"],
+    "clinical_notes": "Excellent for post-inflammatory erythema (red acne marks) and soothing skin after laser treatments or chemical peels."
+  }
+]
