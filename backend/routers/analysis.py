@@ -29,8 +29,20 @@ from database.db import get_db
 from models.database_models import AnalysisHistory, User
 from services.gemini_service import analyze_skin_image, generate_skincare_recommendations
 from services.rag_service import query_knowledge_base
-from services.cv_service import process_and_detect
 from routers.auth import get_current_user
+
+# ── Feature Flag: Toggle YOLO pipeline on/off ────────────────────────────────
+# CONCEPT — Feature Flags:
+#   A production pattern used by Netflix, Google, Uber to toggle features
+#   without deleting code. Set ENABLE_YOLO=true for full AI pipeline (needs 1GB+ RAM),
+#   or ENABLE_YOLO=false for lightweight mode where Gemini Vision handles everything.
+ENABLE_YOLO = os.getenv("ENABLE_YOLO", "true").lower() == "true"
+
+if ENABLE_YOLO:
+    from services.cv_service import process_and_detect
+    print("[PIPELINE] ✅ YOLO + MediaPipe pipeline ENABLED")
+else:
+    print("[PIPELINE] ⚡ Lightweight mode — Gemini Vision handles all detection")
 
 # Create a router — like a mini FastAPI app just for analysis routes
 router = APIRouter(prefix="/api", tags=["Analysis"])
@@ -79,26 +91,34 @@ async def analyze_skin(
     if len(image_bytes) < 1000:
         raise HTTPException(status_code=400, detail="Image file is too small or corrupted.")
 
-    try:
-        masked_image_bytes, yolo_context, _ = process_and_detect(image_bytes)
-    except ValueError as e:
-        if str(e) == "NO_FACE_DETECTED":
-            raise HTTPException(status_code=400, detail="No face detected. Please upload a clear picture of a human face.")
-        raise HTTPException(status_code=400, detail=f"Image processing error: {e}")
+    # ── STEP 3: Process image (Feature Flag controlled) ────────────────────
+    if ENABLE_YOLO:
+        # Full pipeline: MediaPipe face masking → YOLO detection → context injection
+        try:
+            masked_image_bytes, yolo_context, _ = process_and_detect(image_bytes)
+        except ValueError as e:
+            if str(e) == "NO_FACE_DETECTED":
+                raise HTTPException(status_code=400, detail="No face detected. Please upload a clear picture of a human face.")
+            raise HTTPException(status_code=400, detail=f"Image processing error: {e}")
+        final_image_bytes = masked_image_bytes
+    else:
+        # Lightweight mode: Send raw image directly to Gemini Vision
+        final_image_bytes = image_bytes
+        yolo_context = ""
 
     # Generate unique ID for this analysis
     analysis_id = str(uuid.uuid4())
 
-    # Save the MASKED image to disk (not the raw image, for privacy)
+    # Save image to disk
     image_filename = f"{analysis_id}.jpg"
     image_path = os.path.join(UPLOAD_DIR, image_filename)
     with open(image_path, "wb") as f:
-        f.write(masked_image_bytes)
+        f.write(final_image_bytes)
 
     # ── STEP 4: Gemini Vision — analyze the skin ─────────────────────────
     print(f"\n[PIPELINE] Stage 3: Gemini Vision Analysis")
-    print(f"[PIPELINE] Injecting YOLO Context: {yolo_context}")
-    gemini_analysis = await analyze_skin_image(masked_image_bytes, yolo_context)
+    print(f"[PIPELINE] YOLO Context: {'Injected' if yolo_context else 'Skipped (lightweight mode)'}")
+    gemini_analysis = await analyze_skin_image(final_image_bytes, yolo_context)
 
     # Check for prompt injection / invalid image (e.g. dog instead of face)
     if gemini_analysis.get("error") == "INVALID_IMAGE":
