@@ -26,13 +26,25 @@ VECTOR DATABASE:
 """
 
 import os
-from langchain_community.vectorstores import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_core.documents import Document
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# ── Feature Flag: Toggle RAG pipeline on/off ─────────────────────────────────
+# CONCEPT — Feature Flags:
+#   ENABLE_RAG=true: Full RAG pipeline with ChromaDB + HuggingFace embeddings (needs ~400MB RAM)
+#   ENABLE_RAG=false: Uses built-in skincare knowledge base (saves ~300MB RAM)
+#   The recommendations are still excellent either way because Gemini does the heavy lifting.
+ENABLE_RAG = os.getenv("ENABLE_RAG", "true").lower() == "true"
+
+if ENABLE_RAG:
+    from langchain_community.vectorstores import Chroma
+    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+    from langchain_core.documents import Document
+    print("[RAG] ✅ Full RAG pipeline with ChromaDB ENABLED")
+else:
+    print("[RAG] ⚡ Lightweight mode — using built-in knowledge base")
 
 # Path to our knowledge base documents
 DATASET_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "skincare_dataset.json")
@@ -53,6 +65,10 @@ def initialize_rag():
       This is how semantic search works!
     """
     global _vector_store
+
+    if not ENABLE_RAG:
+        print("[RAG] Skipping ChromaDB initialization (lightweight mode)")
+        return
 
     try:
         # Use local HuggingFace embedding model (No API key needed, never throws 404!)
