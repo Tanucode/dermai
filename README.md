@@ -198,7 +198,6 @@ echo "SECRET_KEY=super_secret_jwt_key" >> .env
 # Run the server
 uvicorn main:app --reload
 ```
-*Backend API Docs available at: http://localhost:8000/docs*
 
 ### 2. Frontend Setup
 ```bash
@@ -206,7 +205,7 @@ cd frontend
 npm install
 npm run dev
 ```
-*Frontend UI available at: http://localhost:5173*
+*Frontend UI available at: https://dermai-virid.vercel.app*
 
 ### 3. Docker Deployment (Optional)
 ```bash
